@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ProspectRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProspectRepository::class)]
@@ -24,6 +26,14 @@ class Prospect
 
     #[ORM\Column(length: 255)]
     private ?string $phone = null;
+
+    #[ORM\OneToMany(targetEntity: ProspectUpdate::class, mappedBy: 'prospect', orphanRemoval: true)]
+    private Collection $prospectUpdates;
+
+    public function __construct()
+    {
+        $this->prospectUpdates = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -74,6 +84,36 @@ class Prospect
     public function setPhone(string $phone): static
     {
         $this->phone = $phone;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ProspectUpdate>
+     */
+    public function getProspectUpdates(): Collection
+    {
+        return $this->prospectUpdates;
+    }
+
+    public function addProspectUpdate(ProspectUpdate $prospectUpdate): static
+    {
+        if (!$this->prospectUpdates->contains($prospectUpdate)) {
+            $this->prospectUpdates->add($prospectUpdate);
+            $prospectUpdate->setProspect($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProspectUpdate(ProspectUpdate $prospectUpdate): static
+    {
+        if ($this->prospectUpdates->removeElement($prospectUpdate)) {
+            // set the owning side to null (unless already changed)
+            if ($prospectUpdate->getProspect() === $this) {
+                $prospectUpdate->setProspect(null);
+            }
+        }
 
         return $this;
     }
