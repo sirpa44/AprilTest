@@ -27,6 +27,7 @@ class Prospect
     #[ORM\Column(length: 255)]
     private ?string $phone = null;
 
+    // relation OneToMany on ProspectUpdate Entity
     #[ORM\OneToMany(targetEntity: ProspectUpdate::class, mappedBy: 'prospect', orphanRemoval: true)]
     private Collection $prospectUpdates;
 

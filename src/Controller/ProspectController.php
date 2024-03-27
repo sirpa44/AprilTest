@@ -52,6 +52,9 @@ class ProspectController extends AbstractController
         ]);
     }
 
+    // Prospect post update, the Dipspatcher call the ProspectUpdatedLister
+    // ProspectUpdateListener create a new ProspectUpdateEntity
+    // ProspectUpdateEntity have ManyToOne relation with UserEntity and ProspectEntity
     #[Route('/{id}/edit', name: 'app_prospect_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Prospect $prospect, EntityManagerInterface $entityManager, EventDispatcherInterface $eventDispatcher): Response
     {
@@ -61,6 +64,7 @@ class ProspectController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
+            //listener on post update Prospect create anew Prospect Event
             $eventDispatcher->dispatch(new ProspectUpdatedEvent($this->getUser(), $prospect));
 
             return $this->redirectToRoute('app_prospect_index', [], Response::HTTP_SEE_OTHER);

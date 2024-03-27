@@ -7,6 +7,7 @@ use App\Event\ProspectUpdatedEvent;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 
+// once the ProspectUpdatedEvent is created the method onProspectUpdateis executed
 #[AsEventListener(event: ProspectUpdatedEvent::class, method: 'onProspectUpdated')]
 final class ProspectUpdatedListener
 {
@@ -15,6 +16,7 @@ final class ProspectUpdatedListener
     )
     {}
 
+    // create a new ProspectUpdate with the User, the Prospect and a TimeStampImmutable
     public function onProspectUpdated(ProspectUpdatedEvent $event): void
     {
         $prospectUpdate = new ProspectUpdate();
