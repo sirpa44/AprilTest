@@ -3,10 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Prospect;
+use App\Event\ProspectUpdatedEvent;
 use App\Form\ProspectType;
 use App\Repository\ProspectRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -51,13 +53,15 @@ class ProspectController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_prospect_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Prospect $prospect, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Prospect $prospect, EntityManagerInterface $entityManager, EventDispatcherInterface $eventDispatcher): Response
     {
         $form = $this->createForm(ProspectType::class, $prospect);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
+
+            $eventDispatcher->dispatch(new ProspectUpdatedEvent($this->getUser(), $prospect));
 
             return $this->redirectToRoute('app_prospect_index', [], Response::HTTP_SEE_OTHER);
         }
