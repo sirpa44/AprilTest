@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/prospect')]
 class ProspectController extends AbstractController
 {
-    #[Route('/', name: 'app_prospect_index', methods: ['GET'])]
+    #[Route('/index', name: 'app_prospect_index', methods: ['GET'])]
     public function index(ProspectRepository $prospectRepository): Response
     {
         return $this->render('prospect/index.html.twig', [
@@ -42,7 +42,7 @@ class ProspectController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_prospect_show', methods: ['GET'])]
+    #[Route('/{id}/show', name: 'app_prospect_show', methods: ['GET'])]
     public function show(Prospect $prospect): Response
     {
         return $this->render('prospect/show.html.twig', [
@@ -68,7 +68,7 @@ class ProspectController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_prospect_delete', methods: ['POST'])]
+    #[Route('/{id}/delete', name: 'app_prospect_delete', methods: ['POST'])]
     public function delete(Request $request, Prospect $prospect, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$prospect->getId(), $request->getPayload()->get('_token'))) {
