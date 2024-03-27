@@ -1,7 +1,7 @@
 ## Environement:
 
-symfony 6.4
-PHP 8.3
+symfony 6.4  
+PHP 8.3  
 mariadb 10.11
 
 ## installation
