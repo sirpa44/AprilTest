@@ -14,7 +14,7 @@ final class Version20240327115208 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Create prospect entity';
+        return 'Create prospect table';
     }
 
     public function up(Schema $schema): void
